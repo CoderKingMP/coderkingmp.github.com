@@ -24,3 +24,5 @@ function animate() {
 
   player.draw()
 }
+
+animate()
