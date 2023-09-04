@@ -2,6 +2,8 @@ class Player {
   constructor(x, y, radius, color) {
     this.x = x
     this.y = y
+    this.vx = 0
+    this.vy = 0
     this.radius = radius
     this.color = color
   }
