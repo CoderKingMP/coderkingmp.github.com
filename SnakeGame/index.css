@@ -1,0 +1,9 @@
+canvas{
+    background-color: rgb(249, 199, 180);
+    justify-items: center;
+}
+body { 
+    background-color: black;
+    width: auto;
+    height: auto;
+}
