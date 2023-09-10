@@ -13,12 +13,10 @@ var zombieTick = 0;
 var zombieSummonTick = 100;
 
 function collision(a,b){
-    if (
-        a.x < b.x + rect2.w &&
-        a.x + a.w > rect2.x &&
-        a.y < rect2.y + rect2.h &&
-        a.y + rect1.h > rect2.y
-      ) {
+    return a.x < b.x + b.width &&
+    a.x + a.width > b.x &&
+    a.y < b.y + b.height &&
+    a.y + a.height > b.y
 }
 
 class Player {
@@ -69,6 +67,7 @@ class Zombie {
         this.height = height;
         this.vx = 0;
         this.vy = 0;
+        this.health = 3;
     }
 }
 Zombie.prototype.move = function() {
@@ -93,13 +92,26 @@ Zombie.prototype.move = function() {
 Zombie.prototype.draw = function() {
     ctx.fillStyle = "rgb(52, 117, 50)"
     ctx.fillRect(this.x, this.y, this.width, this.height);
+    
+    ctx.font = "75px Standard Font";
+    ctx.fillStyle = "darkred";
+    ctx.fillText(this.health, this.x + 25, this.y)
 };
 
 function spawnZombie(){
     var x = spawnX[Math.floor(Math.random() * spawnX.length)]
     var y = spawnY[Math.floor(Math.random() * spawnY.length)]
-    var zomb = new Zombie(x,y,50,50)
+    var zomb = new Zombie(x,y,100,100)
     zombies.push(zomb)
+}
+
+function reset(){
+    player.x = canvas.width / 2
+    player.y = canvas.height / 2
+    player.vx = 0
+    player.vy = 0
+    zombies = []
+    Projectiles = []
 }
 
 function animate(){
@@ -124,12 +136,30 @@ function animate(){
     Projectiles.forEach((projctile) => {
         projctile.move()
         projctile.draw()
+        zombies.forEach((zombie) => {
+            if (collision(projctile, zombie)){
+                zombie.health -= 1
+                zombie.width /= 1.5
+                zombie.height /= 1.5
+                zombie.x += zombie.width /2
+                zombie.y += zombie.height / 2
+                if (zombie.health == 0){
+                    var index = zombies.indexOf(zombie)
+                    zombies.splice(index, 1)
+                }
+                var index = Projectiles.indexOf(projctile)
+                Projectiles.splice(index, 1)
+
+            }
+        });
     });
 
     zombies.forEach((zombie) => {
         zombie.move()
         zombie.draw()
-        console.log(collision(player,zombie))
+        if (collision(player,zombie)){
+            reset()
+        }
     });
     if (zombieTick % zombieSummonTick === 0) {
         spawnZombie();
