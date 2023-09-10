@@ -12,6 +12,9 @@ canvas.height = HEIGHT;
 var zombieTick = 0;
 var zombieSummonTick = 100;
 
+var fireTick = 0;
+var fireSummonTick = 10;
+
 function collision(a,b){
     return a.x < b.x + b.width &&
     a.x + a.width > b.x &&
@@ -68,21 +71,22 @@ class Zombie {
         this.vx = 0;
         this.vy = 0;
         this.health = 3;
+        this.speed = 0.5;
     }
 }
 Zombie.prototype.move = function() {
     if (player.x  > this.x) {
-        this.vx = 1
+        this.vx = this.speed
     }
     if (player.x  < this.x) {
-        this.vx = -1
+        this.vx = -this.speed
     }
 
     if (player.y  > this.y) {
-        this.vy = 1
+        this.vy = this.speed
     }
     if (player.y  < this.y) {
-        this.vy = -1
+        this.vy = -this.speed
     }
 
     this.x += this.vx
@@ -114,6 +118,10 @@ function reset(){
     Projectiles = []
 }
 
+function fire(){
+    var proj = new Projectile(player.x + player.width / 2 + 5, player.y + player.height / 2 + 5, player.vx * 3, player.vy * 3)
+    Projectiles.push(proj)
+}
 function animate(){
     ctx.fillStyle = "rgba(0,0,0,0.1)"
     ctx.fillRect(0,0, canvas.width, canvas.height)
@@ -133,7 +141,11 @@ function animate(){
         player.vy = 0
     }
 
-    Projectiles.forEach((projctile) => {
+    Projectiles.forEach((projctile) => { 
+        if (projctile.x + projctile.width > canvas.width || projctile.x < 0 || projctile.y < 0 || projctile.y + projctile.height > canvas.height){
+            var index = Projectiles.indexOf(projctile)
+            Projectiles.splice(index, 1)
+        }
         projctile.move()
         projctile.draw()
         zombies.forEach((zombie) => {
@@ -143,6 +155,7 @@ function animate(){
                 zombie.height /= 1.5
                 zombie.x += zombie.width /2
                 zombie.y += zombie.height / 2
+                zombie.speed += 1
                 if (zombie.health == 0){
                     var index = zombies.indexOf(zombie)
                     zombies.splice(index, 1)
@@ -164,6 +177,10 @@ function animate(){
     if (zombieTick % zombieSummonTick === 0) {
         spawnZombie();
     }
+    if (fireTick % fireSummonTick === 0) {
+        fire()
+    }
+    fireTick ++
     zombieTick++;
     requestAnimationFrame(animate)
 };
@@ -188,20 +205,4 @@ window.addEventListener("keydown", (event) => {
         player.vy = 0
     }
   });
-var spacePressed = false
-window.addEventListener("keydown", (event) => {
-    if (event.key == " "){
-        if (spacePressed == false){
-            var proj = new Projectile(player.x + player.width / 2 + 5, player.y + player.height / 2 + 5, player.vx * 3, player.vy * 3)
-            Projectiles.push(proj)
-        }
-        spacePressed = true
-    }
-});
-
-window.addEventListener("keyup", (event) => {
-    if (event.key == " "){
-        spacePressed = false
-    }
-})
 
