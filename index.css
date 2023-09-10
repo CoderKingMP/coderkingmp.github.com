@@ -1,0 +1,13 @@
+#Title {
+    font-size: 100px;
+    border-radius: 30px;
+    background-color: red;
+    text-align: center;
+    width: 5em;
+    align-items: center;
+    flex: auto;
+}
+
+body {
+    background-color: rgba(12, 186, 186, 0.638);
+}
