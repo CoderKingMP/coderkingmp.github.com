@@ -119,8 +119,10 @@ function reset(){
 }
 
 function fire(){
-    var proj = new Projectile(player.x + player.width / 2 + 5, player.y + player.height / 2 + 5, player.vx * 3, player.vy * 3)
-    Projectiles.push(proj)
+    if (Math.abs(player.vx) > 0 || Math.abs(player.vy) > 0){
+        var proj = new Projectile(player.x + player.width / 2 + 5, player.y + player.height / 2 + 5, player.vx * 3, player.vy * 3)
+        Projectiles.push(proj)
+    }
 }
 function animate(){
     ctx.fillStyle = "rgba(0,0,0,0.1)"
