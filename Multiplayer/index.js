@@ -2,6 +2,8 @@ const canvas = document.getElementById("canvas");
 
 const ctx = canvas.getContext("2d");
 
+
+var socket = io()
 var scrollX = 0;
 var scrollY = 0;
 
@@ -11,12 +13,14 @@ ctx.scale(sc,sc);
 const width = canvas.width
 const height = canvas.height
 
+var frontEndPlayers = []
+
 function isCollide( box1, box2 ) {
     return (
-      box1.x + box1.width >= box2.x && // box1 right collides with box2 left
-      box2.x + box2.width >= box1.x && // box2 right collides with box1 left
-      box1.y + box1.height >= box2.y && // box1 bottom collides with box2 top
-      box2.y + box2.height >= box1.y // box1 top collides with box2 bottom
+      box1.x + box1.width >= box2.x && 
+      box2.x + box2.width >= box1.x && 
+      box1.y + box1.height >= box2.y && 
+      box2.y + box2.height >= box1.y 
     )
   }
 
@@ -59,6 +63,20 @@ class Player {
 Player.prototype.draw = function(){
     circle(this.x - scrollX,this.y - scrollY,this.radius,this.radius, this.color)
 }
+
+function addPlayer(p){
+    frontEndPlayers.push(new Player(p.x, p.y, p.radius, 'blue', 0,0, p.radius, p.radius));
+}
+
+socket.on('updatePlayers', (players) => {
+    console.log("emitted updatePlayers event")
+    console.log(players)
+    var arrayLength = players.length;
+    for (var i = 0; i < arrayLength; i++) {
+        console.log(players[i])
+        //Do something
+    }
+})
 
 const grid = []
 const walls = []
@@ -111,6 +129,11 @@ function animate(){
             scrollY -= player.vy
         }
     });
+    frontEndPlayers.forEach((p) => {
+        p.draw()
+    });
+
+
 
 
     player.draw()
@@ -119,7 +142,6 @@ function animate(){
 
 animate()   
 
-console.log(grid)
 
 
 
@@ -130,18 +152,48 @@ scrollX += player.vx
 ctx.fillRect(sq.x, sq.y, sq.width, sq.height)
 var speed = 0.5
 window.addEventListener("keydown", (event) => {
-    player.vx = 0;
-    player.vy = 0;
     if (event.key === "d") {
+        player.vx = 0
         player.vx += speed;
+        if (player.vx >= speed){
+            player.vx = speed
+        }
     }
     if (event.key === "a") {
+        player.vx = 0
         player.vx += -speed;
+        if (player.vx <= -speed){
+            player.vx = -speed
+        }
     }
     if (event.key === "w") {
+        player.vy = 0
         player.vy += -speed;
+        if (player.vy >= speed){
+            player.vy = speed
+        }
     }
     if (event.key === "s") {
+        player.vy = 0
         player.vy += speed;
+        if (player.vy <= -speed){
+            player.vy = -speed
+        }
     }
-  });
+});
+window.addEventListener("keyup", (event) => {
+    if (event.key === "d") {
+        player.vx = 0
+    }
+    if (event.key === "a") {
+        player.vx = 0
+    }
+    if (event.key === "w") {
+        player.vy = 0
+    }
+    if (event.key === "s") {
+        player.vy = 0
+    }
+});
+
+  
