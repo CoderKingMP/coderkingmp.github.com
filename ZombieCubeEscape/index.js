@@ -13,7 +13,7 @@ var zombieTick = 0;
 var zombieSummonTick = 100;
 
 var fireTick = 0;
-var fireSummonTick = 10;
+var fireSummonTick = 25;
 
 function collision(a,b){
     return a.x < b.x + b.width &&
