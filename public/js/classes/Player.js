@@ -1,5 +1,5 @@
 class Player {
-  constructor({ x, y, radius, color, username }) {
+  constructor({ x, y, radius, color, username,}) {
     this.x = x
     this.y = y
     this.radius = radius
@@ -8,9 +8,6 @@ class Player {
   }
 
   draw() {
-    c.font = '12px sans-serif'
-    c.fillStyle = 'white'
-    c.fillText(this.username, this.x - 10, this.y + 20)
     c.save()
     c.shadowColor = this.color
     c.shadowBlur = 20

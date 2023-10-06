@@ -1,3 +1,4 @@
+
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
@@ -6,6 +7,11 @@ const socket = io()
 const scoreEl = document.querySelector('#scoreEl')
 
 const devicePixelRatio = window.devicePixelRatio || 1
+
+const width = 1024 * 2
+const height = 576 * 2
+
+
 
 canvas.width = 1024 * devicePixelRatio
 canvas.height = 576 * devicePixelRatio
@@ -91,7 +97,9 @@ socket.on('updatePlayers', (backEndPlayers) => {
 
       frontEndPlayers[id].target = {
         x: backEndPlayer.x,
-        y: backEndPlayer.y
+        y: backEndPlayer.y,
+        scrollX: backEndPlayers.scrollX,
+        scrollY: backEndPlayers.scrollY
       }
 
       if (id === socket.id) {
@@ -147,7 +155,7 @@ function animate() {
 
   for (const id in frontEndProjectiles) {
     const frontEndProjectile = frontEndProjectiles[id]
-    frontEndProjectile.draw()
+    frontEndProjectile.draw(scrollX, scrollY)
   }
 
   // for (let i = frontEndProjectiles.length - 1; i >= 0; i--) {
@@ -260,3 +268,8 @@ document.querySelector('#usernameForm').addEventListener('submit', (event) => {
     username: document.querySelector('#usernameInput').value
   })
 })
+
+
+window.addEventListener("load", (event) => {
+  console.log("page is fully loaded");
+});

@@ -9,6 +9,9 @@ const io = new Server(server, { pingInterval: 2000, pingTimeout: 5000 })
 
 const port = 3000
 
+const width = 1024 * 2
+const height = 576 * 2
+
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
@@ -40,7 +43,7 @@ io.on('connection', (socket) => {
       x,
       y,
       velocity,
-      playerId: socket.id
+      playerId: socket.id,
     }
 
     console.log(backEndProjectiles)
@@ -48,8 +51,8 @@ io.on('connection', (socket) => {
 
   socket.on('initGame', ({ username, width, height }) => {
     backEndPlayers[socket.id] = {
-      x: 1024 * Math.random(),
-      y: 576 * Math.random(),
+      x: width * Math.random(),
+      y: height * Math.random(),
       color: `hsl(${360 * Math.random()}, 100%, 50%)`,
       sequenceNumber: 0,
       score: 0,
@@ -104,13 +107,13 @@ io.on('connection', (socket) => {
 
     if (playerSides.left < 0) backEndPlayers[socket.id].x = backEndPlayer.radius
 
-    if (playerSides.right > 1024)
-      backEndPlayers[socket.id].x = 1024 - backEndPlayer.radius
+    if (playerSides.right > width)
+      backEndPlayers[socket.id].x = width - backEndPlayer.radius
 
     if (playerSides.top < 0) backEndPlayers[socket.id].y = backEndPlayer.radius
 
-    if (playerSides.bottom > 576)
-      backEndPlayers[socket.id].y = 576 - backEndPlayer.radius
+    if (playerSides.bottom > height)
+      backEndPlayers[socket.id].y = height - backEndPlayer.radius
   })
 })
 
