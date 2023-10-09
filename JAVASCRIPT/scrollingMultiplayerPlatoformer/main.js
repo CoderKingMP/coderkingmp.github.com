@@ -9,9 +9,11 @@ canvas.width =width;
 canvas.height = height;
 
 var lavaTick = 0;
-var lavaCheck  = 20;
+var lavaCheck  = 25;
 
 canvas.focus();
+
+
 
 
 
@@ -24,8 +26,8 @@ var levels = [
         [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1],
         [1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1],
         [1,0,0,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ],
     [
@@ -53,7 +55,18 @@ var gameBoard = [
     [],
     []   
 ]
-
+var resetGameBoard = [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],    
+    [],
+    [],
+    [],
+    []   
+]
 
 
 
@@ -62,10 +75,11 @@ var gameBoard = [
             for (var row = 0; row < 20; row++) {
                 var number = levels[i][column][row];
                 gameBoard[column].push(number);
+                resetGameBoard[column].push(number);
             }
         }
-    };  
-
+    }; 
+console.log(resetGameBoard)
 
 var multiplier = 1024/width;
 var dirtImg = document.querySelector("#dirt");
@@ -126,6 +140,14 @@ function reset() {
     newPlayer.yVel = 0;
     newPlayer.health = newPlayer.maxHealth;
     gamePlaying = true;
+    
+
+    for (var column = 0; column < gameBoard.length; column++) {
+        for (var row = 0; row < 20; row++) {
+            var number = gameBoard[column][row];
+            gameBoard[column][row] = resetGameBoard[column][row]
+        }
+    }
 }
 
 function touching(object1,object2) {
@@ -218,8 +240,8 @@ Player.prototype.draw = function() {
             this.imgHeight,
             this.x-this.width/2,
             this.y-this.height/5,
-            this.width*1.5,
-            this.height*1.5);
+            this.width*1.6,
+            this.height*1.6);
         drawBar(this.x+this.width/2+1/5/2,this.y,this.width*1.5, this.height*0.1,this.health,this.maxHealth,10);
         if (this.player == 1){
             ctx.fillStyle = "Blue"
