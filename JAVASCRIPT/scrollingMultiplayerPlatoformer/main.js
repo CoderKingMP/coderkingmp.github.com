@@ -39,7 +39,7 @@ var levels = [
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,0,0,2],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ],  
     [
@@ -47,7 +47,7 @@ var levels = [
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -82,20 +82,20 @@ var resetGameBoard = [
 
 
 
-    for (var i = 0; i < levels.length; i++) {
-        var level = levels[i]
-        for (var column = 0; column < 10; column++) {
-            for (var row = 0; row < 20; row++) {
-                var number = levels[i][column][row];
-                gameBoard[column].push(number);
-                resetGameBoard[column].push(number);
-            }
+for (var i = 0; i < levels.length; i++) {
+    var level = levels[i]
+    for (var column = 0; column < 10; column++) {
+        for (var row = 0; row < 20; row++) {
+            var number = levels[i][column][row];
+            gameBoard[column].push(number);
         }
-    };
+    }
+};
 
 var multiplier = 1024/width;
 var dirtImg = document.querySelector("#dirt");
 var lavaImg = document.querySelector("#lava");
+var Jumpad = document.querySelector("#Jumpad")
 
 var playerMaxHealth = 100;
 
@@ -152,14 +152,29 @@ function reset() {
     newPlayer.yVel = 0;
     newPlayer.health = newPlayer.maxHealth;
     gamePlaying = true;
-    
 
-    for (var column = 0; column < gameBoard.length; column++) {
-        for (var row = 0; row < 20; row++) {
-            var number = gameBoard[column][row];
-            gameBoard[column][row] = resetGameBoard[column][row]
+        var gameBoard = [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],    
+            [],
+            [],
+            [],
+            []   
+        ]
+    for (var i = 0; i < levels.length; i++) {
+        var level = levels[i]
+        for (var column = 0; column < 10; column++) {
+            for (var row = 0; row < 20; row++) {
+                var number = level[column][row];
+                gameBoard[column].push(number);
+            }
         }
-    }
+    };
+    
 }
 
 function touching(object1,object2) {
@@ -287,6 +302,17 @@ Player.prototype.checkTouching = function() {
                 if (touching) {
                     isTouching = true;
                 }
+            else if(number == 3){
+                var x = row*blockSize;
+                var y = column*blockSize;
+                var touching = this.x+this.width > x &&
+                this.y+this.height > y &&
+                this.x <= x+blockSize &&
+                this.y <= y+blockSize;
+                if (touching) {
+                    this.yVel = jumpForce * -2
+                }
+            }
             }
         }
     }
@@ -479,6 +505,23 @@ function drawGameBoard() {
                     ctx.drawImage(lavaImg,x,y,blockSize,blockSize);
                 }
             }
+            else if (number == 3){
+                var x = row*blockSize;
+                var y = column*blockSize;
+                if (shouldScroll) {
+                    ctx.drawImage(Jumpad,
+                        0*32,
+                        0*32,
+                        32,
+                        32,
+                        (x-this.width/2 - xDiff) - scrollX,
+                        y-this.height/5,
+                        32*1.6,
+                        32*1.6);
+                } else {
+                    ctx.drawImage(Jumpad,x,y,blockSize,blockSize);
+                }
+            }
         }
     }
 
@@ -499,6 +542,8 @@ function getBlockAt(col,row){
 function setBlockAt(col,ro, type){
     gameBoard[col][ro] = type
 }
+
+
 
 function updateLava(){
     var changed = [
