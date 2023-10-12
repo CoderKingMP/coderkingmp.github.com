@@ -9,7 +9,7 @@ canvas.width =width;
 canvas.height = height;
 
 var lavaTick = 0;
-var lavaCheck  = 25;
+var lavaCheck  = 30;
 
 canvas.focus();
 
@@ -20,26 +20,38 @@ canvas.focus();
 var levels = [
     [
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1],
-        [1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1],
-        [1,0,0,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+        [1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0],
+        [1,0,0,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [1,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ],
     [
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    ],  
+    [
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
-        [1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
+        [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ],  
 ]
@@ -71,6 +83,7 @@ var resetGameBoard = [
 
 
     for (var i = 0; i < levels.length; i++) {
+        var level = levels[i]
         for (var column = 0; column < 10; column++) {
             for (var row = 0; row < 20; row++) {
                 var number = levels[i][column][row];
@@ -78,8 +91,7 @@ var resetGameBoard = [
                 resetGameBoard[column].push(number);
             }
         }
-    }; 
-console.log(resetGameBoard)
+    };
 
 var multiplier = 1024/width;
 var dirtImg = document.querySelector("#dirt");
@@ -88,7 +100,7 @@ var lavaImg = document.querySelector("#lava");
 var playerMaxHealth = 100;
 
 var scrollX = 0;
-var shouldScroll = false;
+var shouldScroll = true;
 
 var currentId = 0;
 var gameFrame = 0;
@@ -116,8 +128,8 @@ var projectiles = [];
 var circleRadius = 8*multiplier;
 
 var windRESISTANCE = 0.85;
-var GRAVITY = 0.4*multiplier;
-var jumpForce = 12*multiplier;
+var GRAVITY = 0.5*multiplier;
+var jumpForce = 15*multiplier;
 var movementSpeed = 5*multiplier;
 var speed = 3*multiplier;
 
@@ -171,9 +183,9 @@ function drawBar(x,y,width,height,health,maxHealth,yOffset) {
     var xPosition = (x-width/2);
     var yPosition = (y-yOffset);
     ctx.fillStyle = "red";
-    ctx.fillRect(xPosition,yPosition,width,height);
+    ctx.fillRect(xPosition - scrollX,yPosition,width,height);
     ctx.fillStyle = "limegreen";
-    ctx.fillRect(xPosition,yPosition,width*(health/maxHealth),height);
+    ctx.fillRect(xPosition - scrollX,yPosition,width*(health/maxHealth),height);
 };
 
 
@@ -227,10 +239,20 @@ Player.prototype.draw = function() {
     ctx.textAlign = "middle";
     ctx.textBaseline = "bottom";
     if (shouldScroll) {
-        ctx.drawImage(this.image,this.x,this.y,this.width,this.height);
-        drawBar(this.x-scrollX,this.y,this.imgWidth, this.imgHeight,this.health,this.maxHealth,10*multiplier);
+        ctx.drawImage(this.image,
+            this.frameX*this.imgWidth,
+            this.frameY*this.imgHeight,
+            this.imgWidth,
+            this.imgHeight,
+            (this.x-this.width/2) - scrollX,
+            this.y-this.height/5,
+            this.width*1.6,
+            this.height*1.6);
+        drawBar(this.x+this.width/2+1/5/2,this.y,this.width*1.5, this.height*0.1,this.health,this.maxHealth,10);
+        if (this.player == 1){
+            ctx.fillStyle = "Blue"
+        }
         ctx.fillText("Player " +  this.player, this.x - scrollX, this.y - this.width * 0.3);
-        offset = (toString(SIZEb).length + (blockSize * -5));
     } else {
         // ctx.fillRect(this.x,this.y,this.width,this.height);
         ctx.drawImage(this.image,
@@ -339,9 +361,7 @@ Player.prototype.update = function() {
             document.querySelector(".deadDiv").style.display = "inline-block";
         }
     } 
-    if (this.isPlayer || shouldScroll !== true) {
-        scrollX = this.x-width/2;
-    }
+
 
     if (gameFrame % ProjectileSpawnLength === 1&& this.mouse.keyS) {
         var yVel = 0;
@@ -385,7 +405,7 @@ var Projectile = function(x,y,xVel,yVel,playerID,color) {
 
 Projectile.prototype.draw = function() {
     ctx.fillStyle = this.color;
-    circle(this.x,this.y,this.radius,true);
+    circle(this.x - scrollX,this.y - scrollY,this.radius,true);
 }
 
 Projectile.prototype.checkTouching = function() {
@@ -440,7 +460,7 @@ Projectile.prototype.update = function() {
 
 function drawGameBoard() {
     for (var column = 0; column < gameBoard.length; column++) {
-        for (var row = 0; row < 20; row++) {
+        for (var row = 0; row < gameBoard[0].length; row++) {
             var number = gameBoard[column][row];
             if (number === 1) {
                 var x = row*blockSize;
@@ -482,17 +502,28 @@ function setBlockAt(col,ro, type){
 
 function updateLava(){
     var changed = [
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            [],
+            [],
+            [],
+            [],
+            [],    
+            [],
+            [],
+            [],
+            [],  
+            []
     ]
+    for (var i = 0; i < levels.length; i++) {
+        var level = levels[i]
+        for (var column = 0; column < 10; column++) {
+            for (var row = 0; row < 20; row++) {
+                var number = levels[i][column][row];
+                gameBoard[column].push(number);
+                changed[column].push(0);
+            }
+        }
+    };
+    
     for (var column = gameBoard.length-1; column > 0; column--  ) {
         for (var row = 0; row < gameBoard[0].length; row++) {
             var number = gameBoard[column][row];
@@ -570,9 +601,13 @@ function gameLoop() {
     if (lavaTick % lavaCheck == 0){
         updateLava()
     } 
+    var centerX = (players[0].x + players[1].x) / 2
+
+    scrollX = centerX - width/2;
 }
 
 window.onload = function() {
+    reset()
     gameLoop();
 
 }
