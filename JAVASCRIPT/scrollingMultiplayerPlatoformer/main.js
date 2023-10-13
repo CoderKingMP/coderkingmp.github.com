@@ -11,6 +11,11 @@ canvas.height = height;
 var lavaTick = 0;
 var lavaCheck  = 30;
 
+var JumpadTick = 0;
+var JumpadCheck = 5;
+
+
+
 canvas.focus();
 
 
@@ -23,35 +28,35 @@ var levels = [
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
-        [1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0],
+        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0],
+        [1,0,0,0,0,4,0,1,1,0,0,0,0,0,0,0,0,0,0,0],
         [1,0,0,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [1,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0],
+        [1,0,3,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,3,0],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ],
     [
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,0,0,2],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+        [0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,3,0,0,2],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ],  
     [
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1],
+        [1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
+        [0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1],
+        [0,0,0,1,0,0,0,0,0,0,4,0,0,1,0,0,0,1,1,1],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ],  
 ]
@@ -95,7 +100,22 @@ for (var i = 0; i < levels.length; i++) {
 var multiplier = 1024/width;
 var dirtImg = document.querySelector("#dirt");
 var lavaImg = document.querySelector("#lava");
-var Jumpad = document.querySelector("#Jumpad")
+var Jumpad = document.querySelector("#Jumpad");
+var JumpadUp = document.querySelector("#JumpadUp");
+var Spawner = document.querySelector("#Spawner");
+var ZombieImage = document.querySelector("#Zombie");
+console.log(ZombieImage);
+
+// Jumpad Stats
+var JumpadType = "down";
+var JumpadForce = -17;
+
+// Spawner Stats
+var spawnTick = 0;
+var spawnCheck = 100;
+
+// Zombie Stats
+var Zombies = []
 
 var playerMaxHealth = 100;
 
@@ -137,6 +157,8 @@ var currentLevel = 0;
 var blockSize = width/20;
 var blockColor = "green";
 var deathColor = "red";
+
+
 
 
 function reset() {
@@ -338,6 +360,28 @@ Player.prototype.checkTouchingLava = function() {
     }
     return isTouching;
 };
+Player.prototype.checkTouchingJumpad = function() {
+    var isTouching = false;
+    for (var column = 0; column < gameBoard.length; column++) {
+        for (var row = 0; row < gameBoard[0].length; row++) {
+            var number = gameBoard[column][row];
+            if (number === 3) {
+                var x = row*blockSize;
+                var y = column*blockSize;
+                var touching = this.x+this.width > x &&
+                this.y+this.height > y &&
+                this.x <= x+blockSize &&
+                this.y <= y+blockSize;
+                if (touching) {
+                    isTouching = true;
+                    this.yVel = JumpadForce;
+                }
+            }
+        }
+    }
+    return isTouching;
+};
+
 Player.prototype.update = function() {
     this.xVel = this.xVel * windRESISTANCE;
     this.x += this.xVel;
@@ -414,6 +458,12 @@ Player.prototype.update = function() {
             this.frameX = 0;
         }
       }    
+}
+
+
+function newZombie(x,y){
+    // x,y,width,height
+    // var zombie = new Zombie(x, y, blockSize, blockSize)
 }
 
 var Projectile = function(x,y,xVel,yVel,playerID,color) {
@@ -509,17 +559,22 @@ function drawGameBoard() {
                 var x = row*blockSize;
                 var y = column*blockSize;
                 if (shouldScroll) {
-                    ctx.drawImage(Jumpad,
-                        0*32,
-                        0*32,
-                        32,
-                        32,
-                        (x-this.width/2 - xDiff) - scrollX,
-                        y-this.height/5,
-                        32*1.6,
-                        32*1.6);
+                    if (JumpadType == "down"){
+                        ctx.drawImage(Jumpad, x - scrollX,y, blockSize, blockSize);
+                    }else if (JumpadType == "up"){
+                        ctx.drawImage(JumpadUp, x - scrollX,y, blockSize, blockSize);
+                    }
                 } else {
                     ctx.drawImage(Jumpad,x,y,blockSize,blockSize);
+                }
+            } else if (number == 4){
+                var x = row*blockSize;
+                var y = column*blockSize;
+                if (shouldScroll) {
+                    
+                    ctx.drawImage(Spawner, x - scrollX,y, blockSize, blockSize);
+                } else {
+                    ctx.drawImage(Spawner,x,y,blockSize,blockSize);
                 }
             }
         }
@@ -614,6 +669,7 @@ function gameLoop() {
         players.forEach((player,i) => {
             player.draw();
             player.update();
+            player.checkTouchingJumpad();
           });
           projectiles.forEach((projectile,i) => {
             projectile.draw();
@@ -646,9 +702,25 @@ function gameLoop() {
     if (lavaTick % lavaCheck == 0){
         updateLava()
     } 
+
+    JumpadTick++;
+    if (JumpadTick % JumpadCheck == 0){
+        if (JumpadType == "down"){
+            JumpadType = "up";
+        }else if (JumpadType == "up"){
+            Jumpad = "down";
+        }
+    }
+    spawnTick++;
+    if (spawnTick % spawnCheck == 0){
+        console.log("Should Spawn Zombie")
+    }
+
     var centerX = (players[0].x + players[1].x) / 2
 
     scrollX = centerX - width/2;
+
+
 }
 
 window.onload = function() {
@@ -748,4 +820,3 @@ document.addEventListener('keyup', (event) => {
     document.querySelector(".deadDiv").style.display = "none";
     reset();
   }
-
