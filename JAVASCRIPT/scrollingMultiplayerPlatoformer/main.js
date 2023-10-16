@@ -27,12 +27,12 @@ var levels = [
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0],
+        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
         [1,0,0,0,0,4,0,1,1,0,0,0,0,0,0,0,0,0,0,0],
         [1,0,0,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [1,0,3,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,3,0],
+        [1,0,0,3,0,0,0,2,0,0,0,0,0,0,0,0,0,0,3,0],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ],
     [
@@ -44,7 +44,7 @@ var levels = [
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],
-        [0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,3,0,0,2],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,2],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ],  
     [
@@ -56,7 +56,7 @@ var levels = [
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
         [0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1],
-        [0,0,0,1,0,0,0,0,0,0,4,0,0,1,0,0,0,1,1,1],
+        [0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ],  
 ]
@@ -108,7 +108,7 @@ console.log(ZombieImage);
 
 // Jumpad Stats
 var JumpadType = "down";
-var JumpadForce = -17;
+var JumpadForce = -12;
 
 // Spawner Stats
 var spawnTick = 0;
@@ -116,6 +116,8 @@ var spawnCheck = 100;
 
 // Zombie Stats
 var Zombies = []
+var zombieMaxHealth = 3
+var aliveZombies = 0
 
 var playerMaxHealth = 100;
 
@@ -126,8 +128,8 @@ var currentId = 0;
 var gameFrame = 0;
 
 
-var bulletDamage = 3;
-var ProjectileSpawnLength = 15;
+var bulletDamage = 5;
+var ProjectileSpawnLength = 7;
 
     /*calculations*/
 var AnglestoOtherThing = 360 / (Math.PI * 2);
@@ -148,9 +150,9 @@ var projectiles = [];
 var circleRadius = 8*multiplier;
 
 var windRESISTANCE = 0.85;
-var GRAVITY = 0.5*multiplier;
-var jumpForce = 15*multiplier;
-var movementSpeed = 5*multiplier;
+var GRAVITY = 0.2*multiplier;
+var jumpForce = 5*multiplier;
+var movementSpeed = 2*multiplier;
 var speed = 3*multiplier;
 
 var currentLevel = 0;
@@ -406,10 +408,11 @@ Player.prototype.update = function() {
     this.y += this.yVel;
     if (this.checkTouching()) {
         this.y -= this.yVel;
-        this.yVel = 0;
         if (this.yVel >= 0) {
             this.onFloor = true;
         }
+        
+        this.yVel = 0;
     } else {
         this.onFloor = false;
     }
@@ -460,10 +463,203 @@ Player.prototype.update = function() {
       }    
 }
 
+var Zombie = function(x,y,width,height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.markedForDeletion = false;
+    this.image = ZombieImage;
+    this.yVel = 0;
+    this.xVel = 0;
+    this.onFloor = false;
+    this.lastDirection = "right";
+    this.id = currentId;
+    currentId++;
+    this.maxHealth = zombieMaxHealth;
+    this.health = this.maxHealth;
+    this.imgWidth = 32;
+    this.imgHeight = 32;
+}
+
+Zombie.prototype.draw = function() {
+    ctx.fillStyle = this.color;
+    ctx.font = (multiplier*15) + "px New Roman";
+    ctx.fillStyle = "White";
+    ctx.textAlign = "middle";
+    ctx.textBaseline = "bottom";
+    if (shouldScroll) {
+        ctx.drawImage(this.image,this.x - scrollX,this.y);
+        ctx.fillRect((this.x - this.width / 2) - scrollX,(this.y + this.height - 2),this.imgWidth,this.imgHeight);
+        this.fillStyle = "dark-green";
+        drawBar(this.x+this.width,this.y,this.width*1.5, this.height*0.1,this.health,this.maxHealth,10);
+        
+    }
+}
+
+Zombie.prototype.checkTouching = function() {
+    var isTouching = false;
+    for (var column = 0; column < gameBoard.length; column++) {
+        for (var row = 0; row < gameBoard[0].length; row++) {
+            var number = gameBoard[column][row];
+            if (number === 1) {
+                var x = row*blockSize;
+                var y = column*blockSize;
+                var touching = this.x+this.width > x &&
+                this.y+this.height > y &&
+                this.x <= x+blockSize &&
+                this.y <= y+blockSize;
+                if (touching) {
+                    isTouching = true;
+                }
+            else if(number == 3){
+                var x = row*blockSize;
+                var y = column*blockSize;
+                var touching = this.x+this.width > x &&
+                this.y+this.height > y &&
+                this.x <= x+blockSize &&
+                this.y <= y+blockSize;
+                if (touching) {
+                    this.yVel = jumpForce * -2
+                }
+            }
+            }
+        }
+    }
+    return isTouching;
+};
+Zombie.prototype.checkTouchingLava = function() {
+    var isTouching = false;
+    for (var column = 0; column < gameBoard.length; column++) {
+        for (var row = 0; row < gameBoard[0].length; row++) {
+            var number = gameBoard[column][row];
+            if (number === 2) {
+                var x = row*blockSize;
+                var y = column*blockSize;
+                var touching = this.x+this.width > x &&
+                this.y+this.height > y &&
+                this.x <= x+blockSize &&
+                this.y <= y+blockSize;
+                if (touching) {
+                }
+            }
+        }
+    }
+    return isTouching;
+};
+Zombie.prototype.checkTouchingJumpad = function() {
+    var isTouching = false;
+    for (var column = 0; column < gameBoard.length; column++) {
+        for (var row = 0; row < gameBoard[0].length; row++) {
+            var number = gameBoard[column][row];
+            if (number === 3) {
+                var x = row*blockSize;
+                var y = column*blockSize;
+                var touching = this.x+this.width > x &&
+                this.y+this.height > y &&
+                this.x <= x+blockSize &&
+                this.y <= y+blockSize;
+                if (touching) {
+                    isTouching = true;
+                    this.yVel = JumpadForce;
+                }
+            }
+        }
+    }
+    return isTouching;
+};
+
+Zombie.prototype.checkTouchingJumpad = function() {
+    var isTouching = false;
+    for (var column = 0; column < gameBoard.length; column++) {
+        for (var row = 0; row < gameBoard[0].length; row++) {
+            var number = gameBoard[column][row];
+            if (number === 3) {
+                var x = row*blockSize;
+                var y = column*blockSize;
+                var touching = this.x+this.width > x &&
+                this.y+this.height > y &&
+                this.x <= x+blockSize &&
+                this.y <= y+blockSize;
+                if (touching) {
+                    isTouching = true;
+                    this.yVel = JumpadForce;
+                }
+            }
+        }
+    }
+    return isTouching;
+};
+
+Zombie.prototype.checkTouchingLava = function() {
+    var isTouching = false;
+    for (var column = 0; column < gameBoard.length; column++) {
+        for (var row = 0; row < gameBoard[0].length; row++) {
+            var number = gameBoard[column][row];
+            if (number === 2) {
+                var x = row*blockSize;
+                var y = column*blockSize;
+                var touching = this.x+this.width > x &&
+                this.y+this.height > y &&
+                this.x <= x+blockSize &&
+                this.y <= y+blockSize;
+                if (touching) {
+                    this.health -= 1;
+                }
+            }
+        }
+    }
+    return isTouching;
+};
+
+Zombie.prototype.update = function() {
+    if (this.markedForDeletion){
+        var thisZombie = Zombies.find(this);
+        Zombies.pop(thisZombie);
+    }
+    this.yVel += 2;
+    this.xVel = this.xVel * windRESISTANCE;
+    this.x += this.xVel;
+    if (this.checkTouching() || this.x <= 0) {
+        this.x -= this.xVel;
+        this.xVel = 9;
+    }
+
+    this.xVel = 1
+
+
+    this.yVel += GRAVITY;
+    this.y += this.yVel;
+    if (this.checkTouching()) {
+        this.y -= this.yVel;
+        this.yVel = 0;
+        if (this.yVel >= 0) {
+            this.onFloor = true;
+        }
+    } else {
+        this.onFloor = false;
+    }
+    if (this.y <= 0) {
+        this.y -= this.yVel;
+        this.yVel = 0;
+    }
+
+    if (this.checkTouchingLava()) {
+        this.health -= 1;
+        if (this.health <= 0){
+            this.markedForDeletion = true;
+            var thisZombie = Zombies.find(this);
+            Zombies.pop(thisZombie);
+        }
+    } 
+    }
+
 
 function newZombie(x,y){
     // x,y,width,height
-    // var zombie = new Zombie(x, y, blockSize, blockSize)
+    var zombie = new Zombie(x, y, blockSize, blockSize);
+    Zombies.push(zombie);
+    aliveZombies++;
 }
 
 var Projectile = function(x,y,xVel,yVel,playerID,color) {
@@ -472,8 +668,8 @@ var Projectile = function(x,y,xVel,yVel,playerID,color) {
     this.width = circleRadius*2;
     this.height = circleRadius*2;
     this.radius = circleRadius;
-    this.xVel = xVel;
-    this.yVel = yVel;
+    this.xVel = xVel / 5;
+    this.yVel = yVel / 5;
     this.playerID = playerID;
     this.color = color;
     this.damage = bulletDamage;
@@ -481,7 +677,7 @@ var Projectile = function(x,y,xVel,yVel,playerID,color) {
 
 Projectile.prototype.draw = function() {
     ctx.fillStyle = this.color;
-    circle(this.x - scrollX,this.y - scrollY,this.radius,true);
+    circle(this.x - scrollX,this.y - scrollY,this.radius / 3,true);
 }
 
 Projectile.prototype.checkTouching = function() {
@@ -507,7 +703,6 @@ Projectile.prototype.checkTouching = function() {
 
 Projectile.prototype.update = function() {
     //do something later
-    this.yVel += GRAVITY * 0.7;
     this.x += this.xVel*20*multiplier;
     this.y += this.yVel;
     if (this.checkTouching()) {
@@ -712,9 +907,27 @@ function gameLoop() {
         }
     }
     spawnTick++;
+    var spawnedZombies = 0;
     if (spawnTick % spawnCheck == 0){
-        console.log("Should Spawn Zombie")
+        if (aliveZombies <= 20){
+            for (var column = 0; column < gameBoard.length; column++) {
+                for (var row = 0; row < gameBoard[0].length; row++) {
+                    var number = gameBoard[column][row];
+                    if (number == 4) {
+                        var x = row*blockSize;
+                        var y = column*blockSize;
+                        newZombie(x - scrollX,y);
+                        spawnedZombies ++;
+                    }
+                }
+            }
+        }
+        newZombie(100,300);
     }
+    Zombies.forEach((zombie) => {
+        zombie.draw();
+        zombie.update();
+      });
 
     var centerX = (players[0].x + players[1].x) / 2
 
