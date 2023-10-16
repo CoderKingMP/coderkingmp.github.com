@@ -104,7 +104,7 @@ var Jumpad = document.querySelector("#Jumpad");
 var JumpadUp = document.querySelector("#JumpadUp");
 var Spawner = document.querySelector("#Spawner");
 var ZombieImage = document.querySelector("#Zombie");
-console.log(ZombieImage);
+var fireBallImage = document.querySelector("#fireball");
 
 // Jumpad Stats
 var JumpadType = "down";
@@ -678,6 +678,7 @@ var Projectile = function(x,y,xVel,yVel,playerID,color) {
 Projectile.prototype.draw = function() {
     ctx.fillStyle = this.color;
     circle(this.x - scrollX,this.y - scrollY,this.radius / 3,true);
+    ctx.drawImage(fireBallImage, this.x*0.5, this.y * 0.5);
 }
 
 Projectile.prototype.checkTouching = function() {
