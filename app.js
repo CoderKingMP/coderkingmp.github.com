@@ -20,7 +20,7 @@ class Player {
   }
 }
 
-const port = 3000
+const port = process.env.port  ||3000
 
 const players = []
 
