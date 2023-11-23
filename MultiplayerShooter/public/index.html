@@ -3,11 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shooter</title>
+
+    <title>Platformer</title>
 </head>
 <body>
+
+    
+
     <canvas id="canvas"></canvas>
-    <link rel="stylesheet" href="./index.css">
-    <script src="./frontend.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <img src="./Images/DirtBlock.png" class="hidden" id="dirtBlock">
+    <img src="./Images/GrassField.png" class="hidden" id="GrassField">
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="./JS/variables.js"></script>
+    <script src="./JS/functions.js"></script>
+    <script src="./JS/main.js"></script>
+    <script src="./JS/eventListeners.js"></script>
 </body>
 </html>

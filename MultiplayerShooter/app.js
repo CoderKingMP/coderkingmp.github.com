@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 
 
 io.on('connection', (socket) => {
-  console.log('say something');
+  console.log('Backend Up and Running');
 })
 
 
