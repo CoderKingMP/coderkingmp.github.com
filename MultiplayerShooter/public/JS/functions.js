@@ -4,35 +4,25 @@ function play(sound) {
     sound.play();
 }
 
-function drawFieldBlock(x,y , fieldBlock){
+function drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight){
+    drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+}
+
+function drawFloor(x,y , fieldBlock){
     ctx.drawImage(fieldBlock,x,y,32,32);
 }
-function drawDirtBlock(x,y , dirtBlock){
-    ctx.drawImage(dirtBlock,x,y,16,16);
-}
-
 function drawField(fieldBlock , dirtBlock){
-    var blockX = 0;
-    var blockY = 0;
-    var timesX = width/32 + 1
-    var timesY = height/32 + 1
-    for (var i = 0; i < timesY; i++) {
-        for (var y = 0; y < timesX; y++) {
-            drawFieldBlock(blockX * 32, blockY * 32, fieldBlock)
-            blockX ++;
-        }
-        blockY ++;
-        blockX =0;
-    }
-
+    ctx.fillStyle = 'green'
+    ctx.fillRect(0,0,width,innerHeight)
 }
-function drawDirtBlocks(dirtBlock){
-    var blockX = 0;
-    var blockY = 285;
-    drawDirtBlock(5 * 32, blockY, dirtBlock)
-    var timesX = width/32 + 1
-    for (var x = 0; x < timesX * 2 ; x++) {
-        drawDirtBlock(blockX * 16, blockY, dirtBlock)
-        blockX ++;
+function floor(floorBlock){
+    ctx.drawImage(floorBlock, 0 - scrollX,275, 3200,30)
+}
+
+
+function drawPlayers(){
+    for (const id in frontEndPlayers){
+        const player = frontEndPlayers[id];
+        player.draw()
     }
 }

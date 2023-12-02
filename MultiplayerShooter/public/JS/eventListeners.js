@@ -1,7 +1,7 @@
 addEventListener("keydown", (event) => {
     var key = event.key
     console.log()
-    if (key == ){
+    if (key == a){
         player.a = 1;
         player.d = 0;
     }else if( key == "d"){
@@ -15,4 +15,6 @@ addEventListener("keydown", (event) => {
         player.w = 0;
         player.s = 1;
     }
+
+
 });
