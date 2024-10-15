@@ -125,6 +125,9 @@ function fire(){
     }
 }
 function animate(){
+    player.vx = 0;
+    player.vy = 0;
+    
     ctx.fillStyle = "rgba(0,0,0,0.1)"
     ctx.fillRect(0,0, canvas.width, canvas.height)
 
