@@ -192,19 +192,15 @@ var speed = 5;
 window.addEventListener("keydown", (event) => {
     if (event.key == "w"){
         player.vy = -speed
-        player.vx = 0
     }
     if (event.key == "s"){
         player.vy = speed
-        player.vx = 0
     }
     if (event.key == "a"){
         player.vx = -speed
-        player.vy = 0
     }
     if (event.key == "d"){
         player.vx = speed
-        player.vy = 0
     }
   });
 
